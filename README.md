@@ -1,14 +1,89 @@
-# Welcome to your CDK TypeScript project
+# Simple API on AWS: APi Gateway + Lambda
 
-This is a blank project for CDK development with TypeScript.
-
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
-
-## Useful commands
-
-* `npm run build`   compile typescript to js
-* `npm run watch`   watch for changes and compile
-* `npm run test`    perform the jest unit tests
-* `cdk deploy`      deploy this stack to your default AWS account/region
-* `cdk diff`        compare deployed stack with current state
-* `cdk synth`       emits the synthesized CloudFormation template
+OpenAPI Schema:
+```json
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Warehouse Stock API",
+    "description": "Manages stock and orders for a warehouse.",
+    "version": "v1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://XXXXXXXXXXXXXX.execute-api.us-east-1.amazonaws.com/prod"
+    }
+  ],
+  "paths": {
+    "/stock": {
+      "get": {
+        "description": "Get current stocks in the warehouse",
+        "operationId": "GetStock",
+        "responses": {
+          "200": {
+            "description": "Stock details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "coffee": {
+                      "type": "integer",
+                      "example": 10
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/order": {
+      "post": {
+        "description": "Create a new order",
+        "operationId": "PostOrder",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "client_name": {
+                    "type": "string",
+                    "example": "John Doe"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Order confirmation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "order_id": {
+                      "type": "integer",
+                      "example": 123
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    }
+  },
+  "components": {
+    "schemas": {}
+  }
+}
+```
